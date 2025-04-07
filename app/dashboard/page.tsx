@@ -1,0 +1,201 @@
+"use client"
+
+import { useState } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { ChevronRight, Menu, Plus, QrCode, Settings, User } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+
+export default function DashboardPage() {
+  const router = useRouter()
+  const [menus, setMenus] = useState([
+    {
+      id: "1",
+      name: "Lunch Menu",
+      items: 12,
+      lastUpdated: "2 days ago",
+    },
+    {
+      id: "2",
+      name: "Dinner Menu",
+      items: 18,
+      lastUpdated: "1 week ago",
+    },
+  ])
+
+  return (
+    <div className="flex min-h-screen flex-col">
+      <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="outline" size="icon" className="md:hidden">
+              <Menu className="h-5 w-5" />
+              <span className="sr-only">Toggle navigation menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-72">
+            <nav className="grid gap-2 text-lg font-medium">
+              <Link
+                href="/dashboard"
+                className="flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-2 text-gray-900 transition-all hover:text-gray-900 dark:bg-gray-800 dark:text-gray-50 dark:hover:text-gray-50"
+              >
+                <ChevronRight className="h-4 w-4" />
+                Dashboard
+              </Link>
+              <Link
+                href="/dashboard/menus"
+                className="flex items-center gap-2 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+              >
+                <ChevronRight className="h-4 w-4" />
+                Menus
+              </Link>
+              <Link
+                href="/dashboard/qr-codes"
+                className="flex items-center gap-2 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+              >
+                <ChevronRight className="h-4 w-4" />
+                QR Codes
+              </Link>
+              <Link
+                href="/dashboard/settings"
+                className="flex items-center gap-2 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+              >
+                <ChevronRight className="h-4 w-4" />
+                Settings
+              </Link>
+            </nav>
+          </SheetContent>
+        </Sheet>
+        <Link href="/" className="flex items-center gap-2 font-semibold">
+          <QrCode className="h-6 w-6" />
+          <span>QR Menu</span>
+        </Link>
+        <nav className="ml-auto hidden gap-6 md:flex">
+          <Link
+            href="/dashboard"
+            className="flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-gray-50"
+          >
+            Dashboard
+          </Link>
+          <Link
+            href="/dashboard/menus"
+            className="flex items-center gap-2 text-lg font-medium text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+          >
+            Menus
+          </Link>
+          <Link
+            href="/dashboard/qr-codes"
+            className="flex items-center gap-2 text-lg font-medium text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+          >
+            QR Codes
+          </Link>
+          <Link
+            href="/dashboard/settings"
+            className="flex items-center gap-2 text-lg font-medium text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+          >
+            Settings
+          </Link>
+        </nav>
+        <Button variant="ghost" size="icon" className="ml-auto md:ml-0" aria-label="Settings">
+          <Settings className="h-5 w-5" />
+        </Button>
+        <Button variant="ghost" size="icon" aria-label="Account">
+          <User className="h-5 w-5" />
+        </Button>
+      </header>
+      <main className="flex-1 p-4 md:p-6">
+        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium">Total Menus</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{menus.length}</div>
+              <p className="text-xs text-gray-500 dark:text-gray-400">+0% from last month</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium">Total QR Scans</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">128</div>
+              <p className="text-xs text-gray-500 dark:text-gray-400">+14% from last month</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium">Menu Items</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">30</div>
+              <p className="text-xs text-gray-500 dark:text-gray-400">+2 from last month</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium">Active QR Codes</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">2</div>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Same as last month</p>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="mt-8 grid gap-4 md:gap-8">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-bold">Your Menus</h2>
+            <Button onClick={() => router.push("/dashboard/create-menu")}>
+              <Plus className="mr-2 h-4 w-4" />
+              Create Menu
+            </Button>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {menus.map((menu) => (
+              <Card key={menu.id} className="overflow-hidden">
+                <CardHeader className="p-4">
+                  <CardTitle>{menu.name}</CardTitle>
+                  <CardDescription>
+                    {menu.items} items • Updated {menu.lastUpdated}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="h-48 bg-gray-100 dark:bg-gray-800">
+                    <div className="flex h-full items-center justify-center text-gray-500 dark:text-gray-400">
+                      Menu Preview
+                    </div>
+                  </div>
+                </CardContent>
+                <CardFooter className="flex justify-between p-4">
+                  <Button variant="outline" size="sm" onClick={() => router.push(`/dashboard/edit-menu/${menu.id}`)}>
+                    Edit Menu
+                  </Button>
+                  <Button size="sm" onClick={() => router.push(`/dashboard/qr-code/${menu.id}`)}>
+                    <QrCode className="mr-2 h-4 w-4" />
+                    View QR
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
+            <Card className="flex h-full flex-col items-center justify-center p-6">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
+                <Plus className="h-6 w-6 text-gray-500 dark:text-gray-400" />
+              </div>
+              <h3 className="mt-4 text-xl font-medium">Create a New Menu</h3>
+              <p className="mt-2 text-center text-sm text-gray-500 dark:text-gray-400">
+                Add a new menu for your restaurant with categories, items, and prices.
+              </p>
+              <Button className="mt-6" onClick={() => router.push("/dashboard/create-menu")}>
+                Create Menu
+              </Button>
+            </Card>
+          </div>
+        </div>
+      </main>
+    </div>
+  )
+}
+
