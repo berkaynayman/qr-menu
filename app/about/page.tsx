@@ -3,35 +3,39 @@ import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { MobileNav } from "@/components/mobile-nav"
 
 export default function AboutPage() {
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="px-4 lg:px-6 h-14 flex items-center">
-        <Link className="flex items-center justify-center" href="/">
-          <Image src="/qr-menu-logo.png" alt="QR Menu Logo" width={32} height={32} className="mr-2" />
-          <span className="font-bold text-xl">QR Menu</span>
-        </Link>
-        <nav className="ml-auto flex gap-4 sm:gap-6">
-          <Link className="text-sm font-medium hover:underline underline-offset-4" href="/features">
-            Features
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-14 items-center">
+          <MobileNav />
+          <Link className="flex items-center justify-center mr-4" href="/">
+            <Image src="/qr-menu-logo.png" alt="QR Menu Logo" width={32} height={32} className="mr-2" />
+            <span className="font-bold text-xl">QR Menu</span>
           </Link>
-          <Link className="text-sm font-medium hover:underline underline-offset-4" href="/pricing">
-            Pricing
-          </Link>
-          <Link className="text-sm font-medium hover:underline underline-offset-4 text-primary" href="/about">
-            About
-          </Link>
-        </nav>
-        <div className="ml-4 flex items-center gap-2">
-          <Link href="/login">
-            <Button variant="outline" size="sm">
-              Log In
-            </Button>
-          </Link>
-          <Link href="/register">
-            <Button size="sm">Sign Up</Button>
-          </Link>
+          <nav className="hidden md:flex gap-6 ml-6">
+            <Link className="text-sm font-medium hover:text-primary transition-colors" href="/features">
+              Features
+            </Link>
+            <Link className="text-sm font-medium hover:text-primary transition-colors" href="/pricing">
+              Pricing
+            </Link>
+            <Link className="text-sm font-medium hover:text-primary transition-colors text-primary" href="/about">
+              About
+            </Link>
+          </nav>
+          <div className="ml-auto hidden md:flex items-center gap-2">
+            <Link href="/login">
+              <Button variant="outline" size="sm">
+                Log In
+              </Button>
+            </Link>
+            <Link href="/register">
+              <Button size="sm">Sign Up</Button>
+            </Link>
+          </div>
         </div>
       </header>
       <main className="flex-1">
@@ -43,7 +47,7 @@ export default function AboutPage() {
             </div>
 
             <div className="prose prose-lg dark:prose-invert mx-auto">
-              <p className="lead text-xl text-gray-500 dark:text-gray-400">
+              <p className="lead text-lg sm:text-xl text-gray-500 dark:text-gray-400">
                 At QR Menu, we believe dining should be a seamless experience — for both customers and restaurant
                 owners. Our mission is to bring simplicity, efficiency, and elegance to the way menus are shared and
                 experienced.
@@ -55,30 +59,32 @@ export default function AboutPage() {
                 no app download required. It's faster, safer, and more eco-friendly.
               </p>
 
-              <div className="my-12 bg-gray-50 dark:bg-gray-800 p-8 rounded-xl">
-                <h2 className="text-2xl font-bold mb-6">
+              <div className="my-12 bg-gray-50 dark:bg-gray-800 p-4 sm:p-8 rounded-xl">
+                <h2 className="text-xl sm:text-2xl font-bold mb-6">
                   Whether you're a cozy local spot or a fast-paced eatery, QR Menu helps you:
                 </h2>
 
                 <div className="space-y-6">
                   <div className="grid grid-cols-[40px_1fr] gap-4 items-center">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black text-white">1</div>
-                    <p className="text-lg font-medium m-0">Easily update your menu in real-time</p>
+                    <p className="text-base sm:text-lg font-medium m-0">Easily update your menu in real-time</p>
                   </div>
 
                   <div className="grid grid-cols-[40px_1fr] gap-4 items-center">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black text-white">2</div>
-                    <p className="text-lg font-medium m-0">Reduce printing costs and waste</p>
+                    <p className="text-base sm:text-lg font-medium m-0">Reduce printing costs and waste</p>
                   </div>
 
                   <div className="grid grid-cols-[40px_1fr] gap-4 items-center">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black text-white">3</div>
-                    <p className="text-lg font-medium m-0">Create a modern, touch-free dining experience</p>
+                    <p className="text-base sm:text-lg font-medium m-0">
+                      Create a modern, touch-free dining experience
+                    </p>
                   </div>
 
                   <div className="grid grid-cols-[40px_1fr] gap-4 items-center">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black text-white">4</div>
-                    <p className="text-lg font-medium m-0">
+                    <p className="text-base sm:text-lg font-medium m-0">
                       Enhance customer engagement with clean, mobile-friendly design
                     </p>
                   </div>
@@ -91,9 +97,9 @@ export default function AboutPage() {
               </p>
 
               <div className="mt-12 text-center">
-                <h2 className="text-2xl font-bold mb-6">Ready to make the switch?</h2>
+                <h2 className="text-xl sm:text-2xl font-bold mb-6">Ready to make the switch?</h2>
                 <Link href="/register">
-                  <Button size="lg" className="gap-1.5">
+                  <Button size="lg" className="gap-1.5 w-full sm:w-auto">
                     Create Your Digital Menu Today
                     <ArrowRight className="h-4 w-4" />
                   </Button>
@@ -103,16 +109,20 @@ export default function AboutPage() {
           </div>
         </section>
       </main>
-      <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
-        <p className="text-xs text-gray-500 dark:text-gray-400">© 2023 QR Menu. All rights reserved.</p>
-        <nav className="sm:ml-auto flex gap-4 sm:gap-6">
-          <Link className="text-xs hover:underline underline-offset-4" href="#">
-            Terms of Service
-          </Link>
-          <Link className="text-xs hover:underline underline-offset-4" href="#">
-            Privacy
-          </Link>
-        </nav>
+      <footer className="border-t py-6">
+        <div className="container px-4 md:px-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-xs text-gray-500 dark:text-gray-400">© 2023 QR Menu. All rights reserved.</p>
+            <nav className="flex gap-4">
+              <Link className="text-xs hover:underline underline-offset-4" href="#">
+                Terms of Service
+              </Link>
+              <Link className="text-xs hover:underline underline-offset-4" href="#">
+                Privacy
+              </Link>
+            </nav>
+          </div>
+        </div>
       </footer>
     </div>
   )

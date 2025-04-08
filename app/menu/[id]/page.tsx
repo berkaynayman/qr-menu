@@ -138,33 +138,33 @@ export default function MenuPage({ params }: { params: { id: string } }) {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <header className="sticky top-0 z-10 border-b bg-white p-4 shadow-sm dark:bg-gray-800">
         <div className="container mx-auto flex items-center justify-between">
-          <h1 className="text-xl font-bold">{menuData.name}</h1>
+          <h1 className="text-lg sm:text-xl font-bold truncate">{menuData.name}</h1>
           <Link href="/">
             <Button variant="ghost" size="sm" className="flex items-center gap-2">
               <Image src="/qr-menu-logo.png" alt="QR Menu Logo" width={24} height={24} />
-              QR Menu
+              <span className="hidden sm:inline">QR Menu</span>
             </Button>
           </Link>
         </div>
       </header>
 
-      <main className="container mx-auto max-w-3xl p-4 py-8">
-        <Card className="mb-8">
+      <main className="container mx-auto max-w-3xl p-4 py-6 sm:py-8">
+        <Card className="mb-6 sm:mb-8">
           <CardHeader>
-            <CardTitle className="text-2xl">{menuData.name}</CardTitle>
+            <CardTitle className="text-xl sm:text-2xl">{menuData.name}</CardTitle>
             <CardDescription>{menuData.description}</CardDescription>
           </CardHeader>
         </Card>
 
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {menuData.categories.map((category) => (
             <Card key={category.id} className="overflow-hidden">
               <CardHeader
-                className="cursor-pointer bg-gray-50 py-4 dark:bg-gray-800"
+                className="cursor-pointer bg-gray-50 py-3 sm:py-4 dark:bg-gray-800"
                 onClick={() => toggleCategory(category.id)}
               >
                 <div className="flex items-center justify-between">
-                  <CardTitle>{category.name}</CardTitle>
+                  <CardTitle className="text-lg sm:text-xl">{category.name}</CardTitle>
                   <Button variant="ghost" size="sm">
                     {isCategoryExpanded(category.id) ? (
                       <ChevronUp className="h-5 w-5" />
@@ -180,11 +180,11 @@ export default function MenuPage({ params }: { params: { id: string } }) {
                     {category.items.map((item) => (
                       <div key={item.id} className="p-4">
                         <div className="flex items-start justify-between">
-                          <div>
+                          <div className="pr-4">
                             <h3 className="font-medium">{item.name}</h3>
                             <p className="text-sm text-gray-500 dark:text-gray-400">{item.description}</p>
                           </div>
-                          <div className="ml-4 text-right">
+                          <div className="text-right whitespace-nowrap">
                             <span className="font-medium">${item.price}</span>
                           </div>
                         </div>
@@ -198,7 +198,7 @@ export default function MenuPage({ params }: { params: { id: string } }) {
         </div>
       </main>
 
-      <footer className="mt-12 border-t bg-white p-6 text-center dark:bg-gray-800">
+      <footer className="mt-12 border-t bg-white p-4 sm:p-6 text-center dark:bg-gray-800">
         <p className="text-sm text-gray-500 dark:text-gray-400">
           Powered by <span className="font-semibold">QR Menu</span>
         </p>

@@ -100,12 +100,14 @@ export default function DashboardPage() {
             Settings
           </Link>
         </nav>
-        <Button variant="ghost" size="icon" className="ml-auto md:ml-0" aria-label="Settings">
-          <Settings className="h-5 w-5" />
-        </Button>
-        <Button variant="ghost" size="icon" aria-label="Account">
-          <User className="h-5 w-5" />
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon" className="ml-auto md:ml-0" aria-label="Settings">
+            <Settings className="h-5 w-5" />
+          </Button>
+          <Button variant="ghost" size="icon" aria-label="Account">
+            <User className="h-5 w-5" />
+          </Button>
+        </div>
       </header>
       <main className="flex-1 p-4 md:p-6">
         <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
@@ -148,13 +150,14 @@ export default function DashboardPage() {
         </div>
         <div className="mt-8 grid gap-4 md:gap-8">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold">Your Menus</h2>
+            <h2 className="text-xl md:text-2xl font-bold">Your Menus</h2>
             <Button onClick={() => router.push("/dashboard/create-menu")}>
               <Plus className="mr-2 h-4 w-4" />
-              Create Menu
+              <span className="hidden sm:inline">Create Menu</span>
+              <span className="sm:hidden">New</span>
             </Button>
           </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {menus.map((menu) => (
               <Card key={menu.id} className="overflow-hidden">
                 <CardHeader className="p-4">
