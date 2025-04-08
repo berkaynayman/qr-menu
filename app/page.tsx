@@ -1,13 +1,35 @@
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { ImageCarousel } from "@/components/image-carousel"
 
 export default function Home() {
+  const carouselImages = [
+    {
+      src: "/chef-with-menu.jpeg",
+      alt: "Chef showing digital menu on smartphone",
+    },
+    {
+      src: "/restaurant-owner-busy.jpeg",
+      alt: "Restaurant owner showing digital menu in a busy restaurant",
+    },
+    {
+      src: "/restaurant-owner-pointing.jpeg",
+      alt: "Restaurant owner pointing to digital menu on smartphone",
+    },
+    {
+      src: "/middle-eastern-restaurant.jpeg",
+      alt: "Middle Eastern restaurant owner showing digital menu",
+    },
+  ]
+
   return (
     <div className="flex flex-col min-h-screen">
       <header className="px-4 lg:px-6 h-14 flex items-center">
         <Link className="flex items-center justify-center" href="/">
+          <Image src="/qr-menu-logo.png" alt="QR Menu Logo" width={32} height={32} className="mr-2" />
           <span className="font-bold text-xl">QR Menu</span>
         </Link>
         <nav className="ml-auto flex gap-4 sm:gap-6">
@@ -34,8 +56,8 @@ export default function Home() {
       </header>
       <main className="flex-1">
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
-          <div className="container px-4 md:px-6">
-            <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
+          <div className="container m-0-auto px-4 md:px-6">
+            <div className="grid gap-6 lg:grid-cols-[1fr_500px] lg:gap-12 xl:grid-cols-[1fr_600px]">
               <div className="flex flex-col justify-center space-y-4">
                 <div className="space-y-2">
                   <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
@@ -53,18 +75,16 @@ export default function Home() {
                       <ArrowRight className="h-4 w-4" />
                     </Button>
                   </Link>
-                  <Link href="/demo">
+                  <Link href="/dashboard">
                     <Button size="lg" variant="outline">
                       View Demo
                     </Button>
                   </Link>
                 </div>
               </div>
-              <img
-                alt="Restaurant QR Menu"
-                className="mx-auto aspect-video overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-last"
-                src="/placeholder.svg?height=550&width=800"
-              />
+              <div className="relative aspect-[4/3] h-[300px] w-full overflow-hidden rounded-xl lg:h-[400px] xl:h-[450px]">
+                <ImageCarousel images={carouselImages} />
+              </div>
             </div>
           </div>
         </section>
@@ -118,4 +138,3 @@ export default function Home() {
     </div>
   )
 }
-

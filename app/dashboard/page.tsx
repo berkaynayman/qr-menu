@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { ChevronRight, Menu, Plus, QrCode, Settings, User } from "lucide-react"
 
@@ -70,7 +71,7 @@ export default function DashboardPage() {
           </SheetContent>
         </Sheet>
         <Link href="/" className="flex items-center gap-2 font-semibold">
-          <QrCode className="h-6 w-6" />
+          <Image src="/qr-menu-logo.png" alt="QR Menu Logo" width={32} height={32} />
           <span>QR Menu</span>
         </Link>
         <nav className="ml-auto hidden gap-6 md:flex">
@@ -169,9 +170,12 @@ export default function DashboardPage() {
                     </div>
                   </div>
                 </CardContent>
-                <CardFooter className="flex justify-between p-4">
+                <CardFooter className="flex flex-wrap gap-2 p-4">
                   <Button variant="outline" size="sm" onClick={() => router.push(`/dashboard/edit-menu/${menu.id}`)}>
                     Edit Menu
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => router.push(`/menu/${menu.id}`)}>
+                    View on Website
                   </Button>
                   <Button size="sm" onClick={() => router.push(`/dashboard/qr-code/${menu.id}`)}>
                     <QrCode className="mr-2 h-4 w-4" />
@@ -198,4 +202,3 @@ export default function DashboardPage() {
     </div>
   )
 }
-

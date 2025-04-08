@@ -2,7 +2,8 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { ChevronDown, ChevronUp, QrCode } from "lucide-react"
+import Image from "next/image"
+import { ChevronDown, ChevronUp } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -139,8 +140,8 @@ export default function MenuPage({ params }: { params: { id: string } }) {
         <div className="container mx-auto flex items-center justify-between">
           <h1 className="text-xl font-bold">{menuData.name}</h1>
           <Link href="/">
-            <Button variant="ghost" size="sm">
-              <QrCode className="mr-2 h-4 w-4" />
+            <Button variant="ghost" size="sm" className="flex items-center gap-2">
+              <Image src="/qr-menu-logo.png" alt="QR Menu Logo" width={24} height={24} />
               QR Menu
             </Button>
           </Link>
@@ -205,4 +206,3 @@ export default function MenuPage({ params }: { params: { id: string } }) {
     </div>
   )
 }
-
