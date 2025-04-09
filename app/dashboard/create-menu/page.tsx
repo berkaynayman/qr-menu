@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 interface MenuItem {
   id: string
@@ -41,6 +42,8 @@ export default function CreateMenuPage() {
       ],
     },
   ])
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const addCategory = () => {
     const newCategory: MenuCategory = {
@@ -96,10 +99,19 @@ export default function CreateMenuPage() {
     )
   }
 
-  const handleSave = () => {
-    // In a real app, you would save this data to your database
-    // For demo purposes, we'll just redirect to the QR code page
-    router.push("/dashboard/create-qr")
+  const handleSave = async () => {
+    if (!menuName) {
+      setError("Menu name is required")
+      return
+    }
+
+    setIsSubmitting(true)
+    setError(null)
+
+    // Simulate saving
+    setTimeout(() => {
+      router.push("/dashboard/create-qr")
+    }, 1000)
   }
 
   return (
@@ -110,11 +122,17 @@ export default function CreateMenuPage() {
           Back
         </Button>
         <h1 className="text-2xl font-bold">Create Menu</h1>
-        <Button className="ml-auto" onClick={handleSave}>
+        <Button className="ml-auto" onClick={handleSave} disabled={isSubmitting}>
           <Save className="mr-2 h-4 w-4" />
-          Save & Generate QR
+          {isSubmitting ? "Saving..." : "Save & Generate QR"}
         </Button>
       </div>
+
+      {error && (
+        <Alert className="mb-6 bg-red-50 text-red-800 border-red-200">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
 
       <Card className="mb-8">
         <CardHeader>

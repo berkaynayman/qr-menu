@@ -14,7 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 export default function CreateQRPage() {
   const router = useRouter()
   const qrRef = useRef<HTMLCanvasElement>(null)
-  const [menuUrl, setMenuUrl] = useState("https://qrmenu.example.com/menu/123")
+  const [menuUrl, setMenuUrl] = useState("https://example.com/menu/menu1")
   const [qrColor, setQrColor] = useState("#000000")
   const [qrSize, setQrSize] = useState(200)
   const [activeTab, setActiveTab] = useState("preview")
@@ -71,7 +71,7 @@ export default function CreateQRPage() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="menu-url">Menu URL</Label>
-              <Input id="menu-url" value={menuUrl} onChange={(e) => setMenuUrl(e.target.value)} readOnly />
+              <Input id="menu-url" value={menuUrl} onChange={(e) => setMenuUrl(e.target.value)} />
               <p className="text-xs text-gray-500">This is the URL that your QR code will link to</p>
             </div>
             <div className="space-y-2">

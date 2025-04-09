@@ -4,28 +4,85 @@ import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { ChevronRight, Menu, Plus, QrCode, Settings, User } from "lucide-react"
+import { ChevronRight, Menu, Plus, QrCode, Settings, User, Trash2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+
+// Mock data
+const mockMenus = [
+  {
+    id: "menu1",
+    name: "Lunch Menu",
+    description: "Our delicious lunch offerings",
+    createdAt: "2023-01-02T00:00:00.000Z",
+    updatedAt: "2023-03-15T00:00:00.000Z",
+  },
+  {
+    id: "menu2",
+    name: "Dinner Menu",
+    description: "Evening specialties",
+    createdAt: "2023-01-03T00:00:00.000Z",
+    updatedAt: "2023-03-10T00:00:00.000Z",
+  },
+  {
+    id: "menu3",
+    name: "Dessert Menu",
+    description: "Sweet treats",
+    createdAt: "2023-02-01T00:00:00.000Z",
+    updatedAt: "2023-03-01T00:00:00.000Z",
+  },
+]
+
+const mockStats = {
+  totalMenus: 3,
+  totalQrCodes: 3,
+  totalItems: 12,
+  totalScans: 128,
+}
 
 export default function DashboardPage() {
   const router = useRouter()
-  const [menus, setMenus] = useState([
-    {
-      id: "1",
-      name: "Lunch Menu",
-      items: 12,
-      lastUpdated: "2 days ago",
-    },
-    {
-      id: "2",
-      name: "Dinner Menu",
-      items: 18,
-      lastUpdated: "1 week ago",
-    },
-  ])
+  const [menuToDelete, setMenuToDelete] = useState<string | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
+
+  const handleDeleteMenu = async () => {
+    if (!menuToDelete) return
+
+    setIsDeleting(true)
+    try {
+      // Simulate deletion
+      setTimeout(() => {
+        setIsDeleting(false)
+        setMenuToDelete(null)
+      }, 1000)
+    } catch (error) {
+      console.error("Error deleting menu:", error)
+      setIsDeleting(false)
+      setMenuToDelete(null)
+    }
+  }
+
+  // Format dates in a consistent way
+  const formatDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString)
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`
+    } catch (e) {
+      return "Invalid date"
+    }
+  }
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -116,7 +173,7 @@ export default function DashboardPage() {
               <CardTitle className="text-sm font-medium">Total Menus</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{menus.length}</div>
+              <div className="text-2xl font-bold">{mockStats.totalMenus}</div>
               <p className="text-xs text-gray-500 dark:text-gray-400">+0% from last month</p>
             </CardContent>
           </Card>
@@ -125,7 +182,7 @@ export default function DashboardPage() {
               <CardTitle className="text-sm font-medium">Total QR Scans</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">128</div>
+              <div className="text-2xl font-bold">{mockStats.totalScans}</div>
               <p className="text-xs text-gray-500 dark:text-gray-400">+14% from last month</p>
             </CardContent>
           </Card>
@@ -134,7 +191,7 @@ export default function DashboardPage() {
               <CardTitle className="text-sm font-medium">Menu Items</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">30</div>
+              <div className="text-2xl font-bold">{mockStats.totalItems}</div>
               <p className="text-xs text-gray-500 dark:text-gray-400">+2 from last month</p>
             </CardContent>
           </Card>
@@ -143,7 +200,7 @@ export default function DashboardPage() {
               <CardTitle className="text-sm font-medium">Active QR Codes</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">2</div>
+              <div className="text-2xl font-bold">{mockStats.totalQrCodes}</div>
               <p className="text-xs text-gray-500 dark:text-gray-400">Same as last month</p>
             </CardContent>
           </Card>
@@ -158,13 +215,11 @@ export default function DashboardPage() {
             </Button>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {menus.map((menu) => (
+            {mockMenus.map((menu) => (
               <Card key={menu.id} className="overflow-hidden">
                 <CardHeader className="p-4">
                   <CardTitle>{menu.name}</CardTitle>
-                  <CardDescription>
-                    {menu.items} items • Updated {menu.lastUpdated}
-                  </CardDescription>
+                  <CardDescription>Updated {formatDate(menu.updatedAt)}</CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
                   <div className="h-48 bg-gray-100 dark:bg-gray-800">
@@ -180,9 +235,17 @@ export default function DashboardPage() {
                   <Button variant="outline" size="sm" onClick={() => router.push(`/menu/${menu.id}`)}>
                     View on Website
                   </Button>
-                  <Button size="sm" onClick={() => router.push(`/dashboard/qr-code/${menu.id}`)}>
+                  <Button size="sm" onClick={() => router.push(`/dashboard/create-qr`)}>
                     <QrCode className="mr-2 h-4 w-4" />
                     View QR
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="ml-auto text-red-500 hover:text-red-700 hover:bg-red-50"
+                    onClick={() => setMenuToDelete(menu.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
                   </Button>
                 </CardFooter>
               </Card>
@@ -202,6 +265,23 @@ export default function DashboardPage() {
           </div>
         </div>
       </main>
+
+      <AlertDialog open={!!menuToDelete} onOpenChange={(open) => !open && setMenuToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure you want to delete this menu?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the menu and all its categories and items.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteMenu} className="bg-red-500 hover:bg-red-600" disabled={isDeleting}>
+              {isDeleting ? "Deleting..." : "Delete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

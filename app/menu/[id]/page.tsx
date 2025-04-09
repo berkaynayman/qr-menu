@@ -4,122 +4,166 @@ import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { ChevronDown, ChevronUp } from "lucide-react"
+import { useParams } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
-interface MenuItem {
-  id: string
-  name: string
-  description: string
-  price: string
-}
-
-interface MenuCategory {
-  id: string
-  name: string
-  items: MenuItem[]
-}
-
-export default function MenuPage({ params }: { params: { id: string } }) {
-  // In a real app, you would fetch the menu data based on the ID
-  const [menuData] = useState({
-    id: params.id,
-    name: "Sample Restaurant Menu",
-    description: "Our delicious offerings made with fresh ingredients",
+// Mock data
+const mockMenus = {
+  menu1: {
+    id: "menu1",
+    name: "Lunch Menu",
+    description: "Our delicious lunch offerings",
     categories: [
       {
-        id: "1",
+        id: "category1",
         name: "Appetizers",
         items: [
           {
-            id: "1",
+            id: "item1",
             name: "Garlic Bread",
             description: "Freshly baked bread with garlic butter",
             price: "5.99",
           },
           {
-            id: "2",
+            id: "item2",
             name: "Mozzarella Sticks",
-            description: "Breaded mozzarella with marinara sauce",
+            description: "Crispy fried cheese sticks with marinara sauce",
             price: "7.99",
-          },
-          {
-            id: "3",
-            name: "Bruschetta",
-            description: "Toasted bread topped with tomatoes, garlic, and basil",
-            price: "6.99",
           },
         ],
       },
       {
-        id: "2",
+        id: "category2",
         name: "Main Courses",
         items: [
           {
-            id: "4",
-            name: "Spaghetti Bolognese",
-            description: "Classic pasta with rich meat sauce",
+            id: "item3",
+            name: "Spaghetti Carbonara",
+            description: "Classic pasta with eggs, cheese, pancetta, and black pepper",
             price: "14.99",
           },
           {
-            id: "5",
+            id: "item4",
             name: "Grilled Salmon",
-            description: "Fresh salmon with lemon butter sauce and vegetables",
+            description: "Fresh salmon fillet with lemon butter sauce",
             price: "18.99",
-          },
-          {
-            id: "6",
-            name: "Chicken Parmesan",
-            description: "Breaded chicken with tomato sauce and melted cheese",
-            price: "16.99",
           },
         ],
       },
       {
-        id: "3",
+        id: "category3",
         name: "Desserts",
         items: [
           {
-            id: "7",
+            id: "item5",
             name: "Tiramisu",
-            description: "Classic Italian dessert with coffee and mascarpone",
+            description: "Coffee-flavored Italian dessert",
+            price: "8.99",
+          },
+          {
+            id: "item6",
+            name: "Chocolate Cake",
+            description: "Rich chocolate cake with ganache",
+            price: "7.99",
+          },
+        ],
+      },
+    ],
+  },
+  menu2: {
+    id: "menu2",
+    name: "Dinner Menu",
+    description: "Evening specialties",
+    categories: [
+      {
+        id: "category4",
+        name: "Starters",
+        items: [
+          {
+            id: "item7",
+            name: "Bruschetta",
+            description: "Toasted bread with tomatoes, garlic, and basil",
+            price: "6.99",
+          },
+          {
+            id: "item8",
+            name: "Calamari",
+            description: "Fried squid with lemon aioli",
+            price: "9.99",
+          },
+        ],
+      },
+      {
+        id: "category5",
+        name: "Entrees",
+        items: [
+          {
+            id: "item9",
+            name: "Filet Mignon",
+            description: "8oz beef tenderloin with red wine reduction",
+            price: "29.99",
+          },
+          {
+            id: "item10",
+            name: "Lobster Ravioli",
+            description: "Homemade ravioli filled with lobster in a cream sauce",
+            price: "24.99",
+          },
+        ],
+      },
+    ],
+  },
+  menu3: {
+    id: "menu3",
+    name: "Dessert Menu",
+    description: "Sweet treats",
+    categories: [
+      {
+        id: "category6",
+        name: "Cakes",
+        items: [
+          {
+            id: "item11",
+            name: "Cheesecake",
+            description: "New York style cheesecake with berry compote",
             price: "7.99",
           },
           {
-            id: "8",
-            name: "Chocolate Cake",
-            description: "Rich chocolate cake with vanilla ice cream",
+            id: "item12",
+            name: "Carrot Cake",
+            description: "Spiced carrot cake with cream cheese frosting",
             price: "6.99",
           },
         ],
       },
       {
-        id: "4",
-        name: "Beverages",
+        id: "category7",
+        name: "Ice Cream",
         items: [
           {
-            id: "9",
-            name: "Soft Drinks",
-            description: "Coke, Sprite, Fanta",
-            price: "2.99",
+            id: "item13",
+            name: "Gelato",
+            description: "Italian-style ice cream in various flavors",
+            price: "5.99",
           },
           {
-            id: "10",
-            name: "Coffee",
-            description: "Espresso, Americano, Cappuccino",
-            price: "3.99",
-          },
-          {
-            id: "11",
-            name: "Fresh Juices",
-            description: "Orange, Apple, Watermelon",
-            price: "4.99",
+            id: "item14",
+            name: "Affogato",
+            description: "Vanilla ice cream with a shot of espresso",
+            price: "6.99",
           },
         ],
       },
-    ] as MenuCategory[],
-  })
+    ],
+  },
+}
+
+export default function MenuPage() {
+  const params = useParams()
+  const menuId = params.id as string
+  const menuData = mockMenus[menuId as keyof typeof mockMenus] || mockMenus.menu1
 
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({})
 
