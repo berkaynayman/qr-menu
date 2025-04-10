@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface MenuItem {
   id: string
@@ -28,6 +29,7 @@ export default function CreateMenuPage() {
   const router = useRouter()
   const [menuName, setMenuName] = useState("")
   const [menuDescription, setMenuDescription] = useState("")
+  const [currency, setCurrency] = useState("USD")
   const [categories, setCategories] = useState<MenuCategory[]>([
     {
       id: "1",
@@ -157,6 +159,23 @@ export default function CreateMenuPage() {
               onChange={(e) => setMenuDescription(e.target.value)}
             />
           </div>
+          <div className="space-y-2">
+            <Label htmlFor="currency">Currency</Label>
+            <Select value={currency} onValueChange={setCurrency}>
+              <SelectTrigger id="currency" className="w-full">
+                <SelectValue placeholder="Select currency" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="USD">USD ($)</SelectItem>
+                <SelectItem value="EUR">EUR (€)</SelectItem>
+                <SelectItem value="GBP">GBP (£)</SelectItem>
+                <SelectItem value="CAD">CAD (C$)</SelectItem>
+                <SelectItem value="AUD">AUD (A$)</SelectItem>
+                <SelectItem value="JPY">JPY (¥)</SelectItem>
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-gray-500">This currency will be displayed with your menu prices</p>
+          </div>
         </CardContent>
       </Card>
 
@@ -206,8 +225,17 @@ export default function CreateMenuPage() {
                         onChange={(e) => updateItem(category.id, item.id, "description", e.target.value)}
                       />
                     </div>
-                    <div className="col-span-1">
+                    <div className="col-span-1 relative">
+                      <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                        {currency === "USD" && "$"}
+                        {currency === "EUR" && "€"}
+                        {currency === "GBP" && "£"}
+                        {currency === "CAD" && "C$"}
+                        {currency === "AUD" && "A$"}
+                        {currency === "JPY" && "¥"}
+                      </div>
                       <Input
+                        className="pl-7"
                         placeholder="Price"
                         value={item.price}
                         onChange={(e) => updateItem(category.id, item.id, "price", e.target.value)}
