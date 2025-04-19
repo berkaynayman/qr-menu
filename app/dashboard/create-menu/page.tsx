@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { ChevronLeft, Plus, Save, Trash2 } from "lucide-react"
+import { createMenu } from "@/lib/api/menus"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -30,20 +31,7 @@ export default function CreateMenuPage() {
   const [menuName, setMenuName] = useState("")
   const [menuDescription, setMenuDescription] = useState("")
   const [currency, setCurrency] = useState("USD")
-  const [categories, setCategories] = useState<MenuCategory[]>([
-    {
-      id: "1",
-      name: "Appetizers",
-      items: [
-        {
-          id: "1",
-          name: "Garlic Bread",
-          description: "Freshly baked bread with garlic butter",
-          price: "5.99",
-        },
-      ],
-    },
-  ])
+  const [categories, setCategories] = useState<MenuCategory[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -110,10 +98,19 @@ export default function CreateMenuPage() {
     setIsSubmitting(true)
     setError(null)
 
-    // Simulate saving
-    setTimeout(() => {
+    try {
+      await createMenu({
+        menuName,
+        menuDescription,
+        currency,
+        categories,
+      })
       router.push("/dashboard/create-qr")
-    }, 1000)
+    } catch (err: any) {
+      setError(err.message || "Failed to create menu")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -136,6 +133,7 @@ export default function CreateMenuPage() {
         </Alert>
       )}
 
+      {/* MENU DETAILS */}
       <Card className="mb-8">
         <CardHeader>
           <CardTitle>Menu Details</CardTitle>
@@ -179,6 +177,7 @@ export default function CreateMenuPage() {
         </CardContent>
       </Card>
 
+      {/* MENU CATEGORIES */}
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-xl font-semibold">Menu Categories</h2>
         <Button onClick={addCategory}>

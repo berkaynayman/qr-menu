@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import Image from "next/image"
 
 export default function CreateQRPage() {
   const router = useRouter()
@@ -120,7 +121,8 @@ export default function CreateQRPage() {
                 <TabsTrigger value="print">Print Version</TabsTrigger>
               </TabsList>
               <TabsContent value="preview" className="flex justify-center p-4">
-                <canvas ref={qrRef} />
+                <img src="data:image/png;base64,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" 
+                alt="QR Code" className="w-1/2" />
               </TabsContent>
               <TabsContent value="print" className="p-4">
                 <div className="flex flex-col items-center space-y-4 rounded-lg border p-6">

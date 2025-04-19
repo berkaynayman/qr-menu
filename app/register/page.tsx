@@ -1,11 +1,10 @@
 "use client"
 
-import type React from "react"
-
-import { useState } from "react"
+import React, { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
+import { registerUser } from "@/lib/api/auth"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -35,10 +34,14 @@ export default function RegisterPage() {
     setLoading(true)
     setError(null)
 
-    // Simulate registration
-    setTimeout(() => {
+    try {
+      await registerUser(formData)
       router.push("/login?registered=true")
-    }, 1000)
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (

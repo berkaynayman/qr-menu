@@ -1,10 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { ChevronRight, Menu, Plus, QrCode, Settings, User, Trash2 } from "lucide-react"
+import { getUserMenus } from "@/lib/api/menus"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -19,69 +20,54 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-
-// Mock data
-const mockMenus = [
-  {
-    id: "menu1",
-    name: "Lunch Menu",
-    description: "Our delicious lunch offerings",
-    createdAt: "2023-01-02T00:00:00.000Z",
-    updatedAt: "2023-03-15T00:00:00.000Z",
-  },
-  {
-    id: "menu2",
-    name: "Dinner Menu",
-    description: "Evening specialties",
-    createdAt: "2023-01-03T00:00:00.000Z",
-    updatedAt: "2023-03-10T00:00:00.000Z",
-  },
-  {
-    id: "menu3",
-    name: "Dessert Menu",
-    description: "Sweet treats",
-    createdAt: "2023-02-01T00:00:00.000Z",
-    updatedAt: "2023-03-01T00:00:00.000Z",
-  },
-]
-
 const mockStats = {
   totalMenus: 3,
   totalQrCodes: 3,
   totalItems: 12,
   totalScans: 128,
 }
-
 export default function DashboardPage() {
   const router = useRouter()
+  const [menus, setMenus] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [menuToDelete, setMenuToDelete] = useState<string | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
+
+  useEffect(() => {
+    async function fetchMenus() {
+      try {
+        const data = await getUserMenus()
+        setMenus(data)
+      } catch (err: any) {
+        setError(err.message || "Failed to load menus")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchMenus()
+  }, [])
+
+  const formatDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString)
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`
+    } catch {
+      return "Invalid date"
+    }
+  }
 
   const handleDeleteMenu = async () => {
     if (!menuToDelete) return
 
     setIsDeleting(true)
-    try {
-      // Simulate deletion
-      setTimeout(() => {
-        setIsDeleting(false)
-        setMenuToDelete(null)
-      }, 1000)
-    } catch (error) {
-      console.error("Error deleting menu:", error)
+    // Buraya gerçek DELETE endpoint geldiyse entegre ederiz
+    setTimeout(() => {
+      setMenus(menus.filter((menu) => menu._id !== menuToDelete))
       setIsDeleting(false)
       setMenuToDelete(null)
-    }
-  }
-
-  // Format dates in a consistent way
-  const formatDate = (dateString: string) => {
-    try {
-      const date = new Date(dateString)
-      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`
-    } catch (e) {
-      return "Invalid date"
-    }
+    }, 1000)
   }
 
   return (
@@ -91,36 +77,19 @@ export default function DashboardPage() {
           <SheetTrigger asChild>
             <Button variant="outline" size="icon" className="md:hidden">
               <Menu className="h-5 w-5" />
-              <span className="sr-only">Toggle navigation menu</span>
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-72">
             <nav className="grid gap-2 text-lg font-medium">
-              <Link
-                href="/dashboard"
-                className="flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-2 text-gray-900 transition-all hover:text-gray-900 dark:bg-gray-800 dark:text-gray-50 dark:hover:text-gray-50"
-              >
+              <Link href="/dashboard" className="flex items-center gap-2 bg-gray-100 px-3 py-2 dark:bg-gray-800">
                 <ChevronRight className="h-4 w-4" />
                 Dashboard
               </Link>
-              <Link
-                href="/dashboard/menus"
-                className="flex items-center gap-2 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-              >
+              <Link href="/dashboard/menus" className="flex items-center gap-2 px-3 py-2 text-gray-500 dark:text-gray-400">
                 <ChevronRight className="h-4 w-4" />
                 Menus
               </Link>
-              <Link
-                href="/dashboard/qr-codes"
-                className="flex items-center gap-2 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-              >
-                <ChevronRight className="h-4 w-4" />
-                QR Codes
-              </Link>
-              <Link
-                href="/dashboard/settings"
-                className="flex items-center gap-2 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-              >
+              <Link href="/dashboard/settings" className="flex items-center gap-2 px-3 py-2 text-gray-500 dark:text-gray-400">
                 <ChevronRight className="h-4 w-4" />
                 Settings
               </Link>
@@ -132,42 +101,18 @@ export default function DashboardPage() {
           <span>QR Menu</span>
         </Link>
         <nav className="ml-auto hidden gap-6 md:flex">
-          <Link
-            href="/dashboard"
-            className="flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-gray-50"
-          >
+          <Link href="/dashboard" className="text-lg font-semibold text-gray-900 dark:text-gray-50">
             Dashboard
-          </Link>
-          <Link
-            href="/dashboard/menus"
-            className="flex items-center gap-2 text-lg font-medium text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-          >
-            Menus
-          </Link>
-          <Link
-            href="/dashboard/qr-codes"
-            className="flex items-center gap-2 text-lg font-medium text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-          >
-            QR Codes
-          </Link>
-          <Link
-            href="/dashboard/settings"
-            className="flex items-center gap-2 text-lg font-medium text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-          >
-            Settings
           </Link>
         </nav>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="ml-auto md:ml-0" aria-label="Settings">
-            <Settings className="h-5 w-5" />
-          </Button>
-          <Button variant="ghost" size="icon" aria-label="Account">
-            <User className="h-5 w-5" />
-          </Button>
+          <Button variant="ghost" size="icon"><Settings className="h-5 w-5" /></Button>
+          <Button variant="ghost" size="icon"><User className="h-5 w-5" /></Button>
         </div>
       </header>
+
       <main className="flex-1 p-4 md:p-6">
-        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium">Total Menus</CardTitle>
@@ -205,34 +150,39 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
         </div>
-        <div className="mt-8 grid gap-4 md:gap-8">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl md:text-2xl font-bold">Your Menus</h2>
-            <Button onClick={() => router.push("/dashboard/create-menu")}>
-              <Plus className="mr-2 h-4 w-4" />
-              <span className="hidden sm:inline">Create Menu</span>
-              <span className="sm:hidden">New</span>
-            </Button>
-          </div>
+        <div className="mt-6 mb-6 flex items-center justify-between">
+          <h2 className="text-xl md:text-2xl font-bold">Your Menus</h2>
+          <Button onClick={() => router.push("/dashboard/create-menu")}>
+            <Plus className="mr-2 h-4 w-4" />
+            Create Menu
+          </Button>
+        </div>
+
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+        {loading ? (
+          <p>Loading menus...</p>
+        ) : menus.length === 0 ? (
+          <p>No menus found. Start by creating a new one.</p>
+        ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {mockMenus.map((menu) => (
-              <Card key={menu.id} className="overflow-hidden">
+            {menus.map((menu) => (
+              <Card key={menu._id} className="overflow-hidden">
                 <CardHeader className="p-4">
-                  <CardTitle>{menu.name}</CardTitle>
-                  <CardDescription>Updated {formatDate(menu.updatedAt)}</CardDescription>
+                  <CardTitle>{menu.menuName}</CardTitle>
+                  <CardDescription>{menu.menuDescription || "No description"}</CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <div className="h-48 bg-gray-100 dark:bg-gray-800">
-                    <div className="flex h-full items-center justify-center text-gray-500 dark:text-gray-400">
-                      Menu Preview
+                  <div className="h-56 dark:bg-gray-800">
+                    <div className="flex h-full items-center justify-center">
+                      <img src={menu.qrCode} />
                     </div>
                   </div>
                 </CardContent>
                 <CardFooter className="flex flex-wrap gap-2 p-4">
-                  <Button variant="outline" size="sm" onClick={() => router.push(`/dashboard/edit-menu/${menu.id}`)}>
+                  <Button variant="outline" size="sm" onClick={() => router.push(`/dashboard/edit-menu/${menu._id}`)}>
                     Edit Menu
                   </Button>
-                  <Button variant="outline" size="sm" onClick={() => router.push(`/menu/${menu.id}`)}>
+                  <Button variant="outline" size="sm" onClick={() => router.push(`/menu/${menu._id}`)}>
                     View on Website
                   </Button>
                   <Button size="sm" onClick={() => router.push(`/dashboard/create-qr`)}>
@@ -243,7 +193,7 @@ export default function DashboardPage() {
                     variant="outline"
                     size="sm"
                     className="ml-auto text-red-500 hover:text-red-700 hover:bg-red-50"
-                    onClick={() => setMenuToDelete(menu.id)}
+                    onClick={() => setMenuToDelete(menu._id)}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -263,20 +213,20 @@ export default function DashboardPage() {
               </Button>
             </Card>
           </div>
-        </div>
+        )}
       </main>
 
       <AlertDialog open={!!menuToDelete} onOpenChange={(open) => !open && setMenuToDelete(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure you want to delete this menu?</AlertDialogTitle>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the menu and all its categories and items.
+              This will permanently delete the menu.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteMenu} className="bg-red-500 hover:bg-red-600" disabled={isDeleting}>
+            <AlertDialogAction onClick={handleDeleteMenu} className="bg-red-500" disabled={isDeleting}>
               {isDeleting ? "Deleting..." : "Delete"}
             </AlertDialogAction>
           </AlertDialogFooter>
