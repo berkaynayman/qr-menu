@@ -52,4 +52,15 @@ export async function getUserMenus(): Promise<any[]> {
   return res.json()
 }
 
-  
+export async function getPublicMenu(menuId: string) {
+  const res = await fetch(`https://qr-menu-backend-yukr.onrender.com/api/menus/${menuId}`, {
+    cache: "no-store",
+  })
+
+  if (!res.ok) {
+    const error = await res.json()
+    throw new Error(error.message || "Failed to fetch menu")
+  }
+
+  return res.json()
+}
