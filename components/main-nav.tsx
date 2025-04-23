@@ -6,7 +6,7 @@ import { MobileNav } from "@/components/mobile-nav"
 export function MainNav() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
+      <div className="container m-0-auto flex h-14 items-center">
         <MobileNav />
         <Link className="flex items-center justify-center mr-4" href="/">
           <Image src="/qr-menu-logo.png" alt="QR Menu Logo" width={32} height={32} className="mr-2" />
