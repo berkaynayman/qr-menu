@@ -4,8 +4,9 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { ChevronRight, Menu, Plus, QrCode, Settings, User, Trash2 } from "lucide-react"
+import { ChevronRight, Menu, Plus, QrCode, Settings, User, Trash2, LogOut, HelpCircle } from "lucide-react"
 import { getUserMenus } from "@/lib/api/menus"
+import { useAuth } from "@/contexts/auth-context"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -20,22 +21,34 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+
 const mockStats = {
   totalMenus: 3,
   totalQrCodes: 3,
   totalItems: 12,
   totalScans: 128,
 }
+
 export default function DashboardPage() {
   const router = useRouter()
+  const { user, isAuthenticated, isLoading, logout } = useAuth()
   const [menus, setMenus] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [menuToDelete, setMenuToDelete] = useState<string | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
 
+  // Redirect if not authenticated
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push("/login")
+    }
+  }, [isAuthenticated, isLoading, router])
+
   useEffect(() => {
     async function fetchMenus() {
+      if (!isAuthenticated) return
+
       try {
         const data = await getUserMenus()
         setMenus(data)
@@ -46,17 +59,10 @@ export default function DashboardPage() {
       }
     }
 
-    fetchMenus()
-  }, [])
-
-  const formatDate = (dateString: string) => {
-    try {
-      const date = new Date(dateString)
-      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`
-    } catch {
-      return "Invalid date"
+    if (!isLoading) {
+      fetchMenus()
     }
-  }
+  }, [isAuthenticated, isLoading])
 
   const handleDeleteMenu = async () => {
     if (!menuToDelete) return
@@ -68,6 +74,11 @@ export default function DashboardPage() {
       setIsDeleting(false)
       setMenuToDelete(null)
     }, 1000)
+  }
+
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return <div className="p-6 text-center">Loading...</div>
   }
 
   return (
@@ -85,11 +96,17 @@ export default function DashboardPage() {
                 <ChevronRight className="h-4 w-4" />
                 Dashboard
               </Link>
-              <Link href="/dashboard/menus" className="flex items-center gap-2 px-3 py-2 text-gray-500 dark:text-gray-400">
+              <Link
+                href="/dashboard/menus"
+                className="flex items-center gap-2 px-3 py-2 text-gray-500 dark:text-gray-400"
+              >
                 <ChevronRight className="h-4 w-4" />
                 Menus
               </Link>
-              <Link href="/dashboard/settings" className="flex items-center gap-2 px-3 py-2 text-gray-500 dark:text-gray-400">
+              <Link
+                href="/dashboard/settings"
+                className="flex items-center gap-2 px-3 py-2 text-gray-500 dark:text-gray-400"
+              >
                 <ChevronRight className="h-4 w-4" />
                 Settings
               </Link>
@@ -106,13 +123,83 @@ export default function DashboardPage() {
           </Link>
         </nav>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon"><Settings className="h-5 w-5" /></Button>
-          <Button variant="ghost" size="icon"><User className="h-5 w-5" /></Button>
+          <Button variant="ghost" size="icon">
+            <Settings className="h-5 w-5" />
+          </Button>
+
+          {/* User profile with visible dropdown */}
+          <div className="relative">
+            <Button
+              variant="outline"
+              className="flex items-center gap-2 px-3"
+              onClick={() => document.getElementById("user-dropdown")?.classList.toggle("hidden")}
+            >
+              <User className="h-5 w-5" />
+              <span className="hidden sm:inline">{user?.restaurantName || "Account"}</span>
+            </Button>
+
+            {/* Dropdown menu - always in the DOM but toggled with hidden class */}
+            <div
+              id="user-dropdown"
+              className="hidden absolute right-0 mt-2 w-56 rounded-md border bg-white shadow-lg z-50"
+            >
+              <div className="p-3 border-b">
+                <div className="flex items-center gap-2">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                    <User className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="font-medium">{user?.restaurantName || "Restaurant"}</p>
+                    <p className="text-xs text-gray-500">{user?.email || "user@example.com"}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="py-1">
+                <Link href="/dashboard" className="flex items-center px-4 py-2 hover:bg-gray-100">
+                  <ChevronRight className="mr-2 h-4 w-4" />
+                  <span>Dashboard</span>
+                </Link>
+                <Link href="/dashboard/create-menu" className="flex items-center px-4 py-2 hover:bg-gray-100">
+                  <Plus className="mr-2 h-4 w-4" />
+                  <span>Create New Menu</span>
+                </Link>
+                <Link href="/dashboard/settings" className="flex items-center px-4 py-2 hover:bg-gray-100">
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Account Settings</span>
+                </Link>
+              </div>
+
+              <div className="border-t py-1">
+                <Link href="/help" className="flex items-center px-4 py-2 hover:bg-gray-100">
+                  <HelpCircle className="mr-2 h-4 w-4" />
+                  <span>Help & Support</span>
+                </Link>
+              </div>
+
+              <div className="border-t py-1">
+                <button onClick={logout} className="flex w-full items-center px-4 py-2 text-red-500 hover:bg-red-50">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Separate visible logout button */}
+          <Button
+            variant="outline"
+            className="flex items-center gap-2 text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600"
+            onClick={logout}
+          >
+            <LogOut className="h-4 w-4" />
+            <span className="hidden sm:inline">Log out</span>
+          </Button>
         </div>
       </header>
 
       <main className="flex-1 p-4 md:p-6">
-      <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium">Total Menus</CardTitle>
@@ -174,7 +261,7 @@ export default function DashboardPage() {
                 <CardContent className="p-0">
                   <div className="h-56 dark:bg-gray-800">
                     <div className="flex h-full items-center justify-center">
-                      <img src={menu.qrCode} />
+                      <img src={menu.qrCode || "/placeholder.svg"} />
                     </div>
                   </div>
                 </CardContent>
@@ -220,9 +307,7 @@ export default function DashboardPage() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This will permanently delete the menu.
-            </AlertDialogDescription>
+            <AlertDialogDescription>This will permanently delete the menu.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>

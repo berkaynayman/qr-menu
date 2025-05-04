@@ -1,36 +1,36 @@
 export async function createMenu(data: {
-    menuName: string
-    menuDescription: string
-    currency: string
-    categories: {
+  menuName: string
+  menuDescription: string
+  currency: string
+  categories: {
+    id: string
+    name: string
+    items: {
       id: string
       name: string
-      items: {
-        id: string
-        name: string
-        description: string
-        price: string
-      }[]
+      description: string
+      price: string
     }[]
-  }) {
-    const token = localStorage.getItem("token")
-    if (!token) throw new Error("User is not authenticated.")
-  
-    const response = await fetch("https://qr-menu-backend-yukr.onrender.com/api/menus/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(data),
-    })
-  
-    if (!response.ok) {
-      const errorData = await response.json()
-      throw new Error(errorData.message || "Failed to create menu")
-    }
-  
-    return response.json()
+  }[]
+}) {
+  const token = localStorage.getItem("token")
+  if (!token) throw new Error("User is not authenticated.")
+
+  const response = await fetch("https://qr-menu-backend-yukr.onrender.com/api/menus/create", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  })
+
+  if (!response.ok) {
+    const errorData = await response.json()
+    throw new Error(errorData.message || "Failed to create menu")
+  }
+
+  return response.json()
 }
 
 export async function getUserMenus(): Promise<any[]> {

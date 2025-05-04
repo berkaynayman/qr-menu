@@ -1,10 +1,11 @@
 "use client"
 
-import React, { useState } from "react"
+import type React from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
-import { loginUser } from "@/lib/api/auth"
+import { useAuth } from "@/contexts/auth-context"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -17,6 +18,7 @@ export default function LoginPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const registered = searchParams.get("registered")
+  const { login, isAuthenticated, isLoading } = useAuth()
 
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
@@ -25,6 +27,13 @@ export default function LoginPage() {
     email: "",
     password: "",
   })
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated && !isLoading) {
+      router.push("/dashboard")
+    }
+  }, [isAuthenticated, isLoading, router])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -37,14 +46,25 @@ export default function LoginPage() {
     setError(null)
 
     try {
-      const { token } = await loginUser(formData)
-      localStorage.setItem("token", token)
-      router.push("/dashboard")
+      await login(formData.email, formData.password)
+      // No need to redirect here as the auth context will handle it
     } catch (err: any) {
       setError(err.message || "Login failed")
     } finally {
       setLoading(false)
     }
+  }
+
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return (
+      <div className="flex flex-col min-h-screen">
+        <MainNav />
+        <div className="flex flex-1 items-center justify-center">
+          <p>Loading...</p>
+        </div>
+      </div>
+    )
   }
 
   return (

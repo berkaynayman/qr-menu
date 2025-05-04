@@ -23,8 +23,8 @@ export function MobileNav() {
         <div className="flex flex-col gap-6 px-2 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-              <Image src="/qr-menu-logo.png" alt="QR Menu Logo" width={32} height={32} />
-              <span className="font-bold text-xl">QR Menu</span>
+              <Image src="/qr-menu-logo.png" alt="Menulya Logo" width={32} height={32} />
+              <span className="font-bold text-xl">Menulya</span>
             </Link>
             <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
               <X className="h-6 w-6" />

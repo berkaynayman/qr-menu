@@ -9,8 +9,8 @@ export function MainNav() {
       <div className="container m-0-auto flex h-14 items-center">
         <MobileNav />
         <Link className="flex items-center justify-center mr-4" href="/">
-          <Image src="/qr-menu-logo.png" alt="QR Menu Logo" width={32} height={32} className="mr-2" />
-          <span className="font-bold text-xl">QR Menu</span>
+          <Image src="/qr-menu-logo.png" alt="Menulya Logo" width={32} height={32} className="mr-2" />
+          <span className="font-bold text-xl">Menulya</span>
         </Link>
         <nav className="hidden md:flex gap-6 ml-6">
           <Link className="text-sm font-medium hover:text-primary transition-colors" href="/features">

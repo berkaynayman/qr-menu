@@ -2,13 +2,15 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
+import { AuthProvider } from "@/contexts/auth-context"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "QR Menu - Digital Menus with QR Codes",
-  description: "Create digital menus for your restaurant that customers can access via QR codes",
-    generator: 'v0.dev'
+  title: "Create QR Code Menus for Free | Menulya.com",
+  description:
+    "Create and manage digital menus with Menulya.com. Generate QR codes, update your menu anytime, and deliver a contactless dining experience — completely free.",
+  generator: "v0.dev",
 }
 
 export default function RootLayout({
@@ -19,11 +21,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className} suppressHydrationWarning>
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   )
 }
-
-
-import './globals.css'
