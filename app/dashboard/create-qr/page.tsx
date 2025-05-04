@@ -2,7 +2,22 @@
 
 import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
-import { ChevronLeft, Download, QrCode } from "lucide-react"
+import {
+  ChevronLeft,
+  Download,
+  Share2,
+  Printer,
+  Palette,
+  Settings,
+  Smartphone,
+  QrCode,
+  Table,
+  FileImage,
+  Mail,
+  Facebook,
+  Instagram,
+  Twitter,
+} from "lucide-react"
 import QRCode from "qrcode"
 
 import { Button } from "@/components/ui/button"
@@ -10,14 +25,21 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Separator } from "@/components/ui/separator"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Slider } from "@/components/ui/slider"
 
 export default function CreateQRPage() {
   const router = useRouter()
   const qrRef = useRef<HTMLCanvasElement>(null)
-  const [menuUrl, setMenuUrl] = useState("https://example.com/menu/menu1")
-  const [qrColor, setQrColor] = useState("#000000")
-  const [qrSize, setQrSize] = useState(200)
-  const [activeTab, setActiveTab] = useState("preview")
+  const [menuUrl, setMenuUrl] = useState("https://menulya.com/menu/sample-menu")
+  const [qrColor, setQrColor] = useState("#FF5A1F") // Brand color
+  const [qrSize, setQrSize] = useState(250)
+  const [qrLogo, setQrLogo] = useState(false)
+  const [qrStyle, setQrStyle] = useState("dots")
+  const [activeTab, setActiveTab] = useState("customize")
+  const [menuName, setMenuName] = useState("Sample Restaurant Menu")
+  const [selectedTemplate, setSelectedTemplate] = useState("table-tent")
 
   useEffect(() => {
     if (qrRef.current) {
@@ -37,19 +59,19 @@ export default function CreateQRPage() {
         },
       )
     }
-  }, [menuUrl, qrColor, qrSize])
+  }, [menuUrl, qrColor, qrSize, qrStyle])
 
   const downloadQRCode = () => {
     if (qrRef.current) {
       const link = document.createElement("a")
-      link.download = "qr-menu-code.png"
+      link.download = `menulya-qr-code-${menuName.toLowerCase().replace(/\s+/g, "-")}.png`
       link.href = qrRef.current.toDataURL("image/png")
       link.click()
     }
   }
 
   return (
-    <div className="container mx-auto max-w-4xl p-4 py-8">
+    <div className="container mx-auto max-w-5xl p-4 py-8">
       <div className="mb-6 flex items-center">
         <Button variant="ghost" onClick={() => router.back()} className="mr-4">
           <ChevronLeft className="mr-2 h-4 w-4" />
@@ -62,89 +84,259 @@ export default function CreateQRPage() {
         </Button>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>QR Code Settings</CardTitle>
-            <CardDescription>Customize your QR code appearance</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="menu-url">Menu URL</Label>
-              <Input id="menu-url" value={menuUrl} onChange={(e) => setMenuUrl(e.target.value)} />
-              <p className="text-xs text-gray-500">This is the URL that your QR code will link to</p>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="qr-color">QR Code Color</Label>
-              <div className="flex items-center gap-2">
-                <Input
-                  id="qr-color"
-                  type="color"
-                  value={qrColor}
-                  onChange={(e) => setQrColor(e.target.value)}
-                  className="h-10 w-10 cursor-pointer p-1"
-                />
-                <Input type="text" value={qrColor} onChange={(e) => setQrColor(e.target.value)} className="flex-1" />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="qr-size">QR Code Size</Label>
-              <Input
-                id="qr-size"
-                type="range"
-                min="100"
-                max="400"
-                step="10"
-                value={qrSize}
-                onChange={(e) => setQrSize(Number.parseInt(e.target.value))}
-                className="w-full"
-              />
-              <div className="flex justify-between text-xs">
-                <span>Small</span>
-                <span>{qrSize}px</span>
-                <span>Large</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="grid gap-6 md:grid-cols-5">
+        {/* Left Column - Settings */}
+        <div className="md:col-span-3 space-y-6">
+          <Tabs defaultValue="customize" value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="customize" className="flex items-center gap-2">
+                <Palette className="h-4 w-4" />
+                <span>Customize</span>
+              </TabsTrigger>
+              <TabsTrigger value="settings" className="flex items-center gap-2">
+                <Settings className="h-4 w-4" />
+                <span>Settings</span>
+              </TabsTrigger>
+              <TabsTrigger value="distribution" className="flex items-center gap-2">
+                <Share2 className="h-4 w-4" />
+                <span>Distribution</span>
+              </TabsTrigger>
+            </TabsList>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>QR Code Preview</CardTitle>
-            <CardDescription>Scan this code to view your menu</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="preview" value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="mb-4 grid w-full grid-cols-2">
-                <TabsTrigger value="preview">Preview</TabsTrigger>
-                <TabsTrigger value="print">Print Version</TabsTrigger>
-              </TabsList>
-              <TabsContent value="preview" className="flex justify-center p-4">
-                <img
-                  src="data:image/png;base64,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"
-                  alt="QR Code"
-                  className="w-1/2"
-                />
-              </TabsContent>
-              <TabsContent value="print" className="p-4">
-                <div className="flex flex-col items-center space-y-4 rounded-lg border p-6">
-                  <h3 className="text-xl font-bold">Scan for our Digital Menu</h3>
-                  <canvas ref={qrRef} />
-                  <p className="text-center text-sm text-gray-500">
-                    Scan this QR code with your smartphone camera to view our menu
-                  </p>
-                </div>
-                <Button className="mt-4 w-full" onClick={downloadQRCode}>
+            <TabsContent value="customize" className="space-y-4 pt-4">
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle>QR Code Appearance</CardTitle>
+                  <CardDescription>Customize how your QR code looks</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="qr-color">QR Code Color</Label>
+                    <div className="flex items-center gap-3">
+                      <Input
+                        id="qr-color"
+                        type="color"
+                        value={qrColor}
+                        onChange={(e) => setQrColor(e.target.value)}
+                        className="h-10 w-14 cursor-pointer p-1"
+                      />
+                      <Input
+                        type="text"
+                        value={qrColor}
+                        onChange={(e) => setQrColor(e.target.value)}
+                        className="flex-1 uppercase"
+                        maxLength={7}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <Label htmlFor="qr-size">QR Code Size</Label>
+                      <span className="text-sm text-muted-foreground">{qrSize}px</span>
+                    </div>
+                    <Slider
+                      id="qr-size"
+                      min={150}
+                      max={400}
+                      step={10}
+                      value={[qrSize]}
+                      onValueChange={(value) => setQrSize(value[0])}
+                      className="w-full"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="qr-style">QR Code Style</Label>
+                    <Select value={qrStyle} onValueChange={setQrStyle}>
+                      <SelectTrigger id="qr-style">
+                        <SelectValue placeholder="Select style" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="dots">Dots</SelectItem>
+                        <SelectItem value="squares">Squares</SelectItem>
+                        <SelectItem value="rounded">Rounded</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2 pt-2">
+                    <Label htmlFor="menu-name">Menu Name</Label>
+                    <Input
+                      id="menu-name"
+                      placeholder="e.g., Lunch Menu, Dinner Specials"
+                      value={menuName}
+                      onChange={(e) => setMenuName(e.target.value)}
+                    />
+                    <p className="text-xs text-muted-foreground">This will be displayed on the printed QR code</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="settings" className="space-y-4 pt-4">
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle>QR Code Settings</CardTitle>
+                  <CardDescription>Configure your QR code functionality</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="menu-url">Menu URL</Label>
+                    <Input id="menu-url" value={menuUrl} onChange={(e) => setMenuUrl(e.target.value)} />
+                    <p className="text-xs text-muted-foreground">This is the URL that your QR code will link to</p>
+                  </div>
+
+                  <Separator className="my-4" />
+
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="font-medium">Analytics Tracking</h4>
+                        <p className="text-sm text-muted-foreground">Track scans and views of your menu</p>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Button variant="outline" size="sm">
+                          Enable
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="font-medium">Add Logo to QR Code</h4>
+                        <p className="text-sm text-muted-foreground">Place your logo in the center of the QR code</p>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Button variant={qrLogo ? "default" : "outline"} size="sm" onClick={() => setQrLogo(!qrLogo)}>
+                          {qrLogo ? "Enabled" : "Disabled"}
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="distribution" className="space-y-4 pt-4">
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle>Distribution Options</CardTitle>
+                  <CardDescription>Choose how to share your QR code with customers</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-6">
+                    <div>
+                      <Label className="mb-2 block">Select a template</Label>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        <div
+                          className={`border rounded-lg p-3 cursor-pointer transition-all ${selectedTemplate === "table-tent" ? "border-primary bg-primary/5" : "hover:border-gray-400"}`}
+                          onClick={() => setSelectedTemplate("table-tent")}
+                        >
+                          <div className="flex flex-col items-center text-center gap-2">
+                            <Table className="h-8 w-8 text-primary" />
+                            <span className="text-sm font-medium">Table Tent</span>
+                          </div>
+                        </div>
+                        <div
+                          className={`border rounded-lg p-3 cursor-pointer transition-all ${selectedTemplate === "menu-insert" ? "border-primary bg-primary/5" : "hover:border-gray-400"}`}
+                          onClick={() => setSelectedTemplate("menu-insert")}
+                        >
+                          <div className="flex flex-col items-center text-center gap-2">
+                            <FileImage className="h-8 w-8 text-primary" />
+                            <span className="text-sm font-medium">Menu Insert</span>
+                          </div>
+                        </div>
+                        <div
+                          className={`border rounded-lg p-3 cursor-pointer transition-all ${selectedTemplate === "window-display" ? "border-primary bg-primary/5" : "hover:border-gray-400"}`}
+                          onClick={() => setSelectedTemplate("window-display")}
+                        >
+                          <div className="flex flex-col items-center text-center gap-2">
+                            <Smartphone className="h-8 w-8 text-primary" />
+                            <span className="text-sm font-medium">Window Display</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <Separator />
+
+                    <div>
+                      <h3 className="font-medium mb-3">Download Options</h3>
+                      <div className="grid grid-cols-2 gap-3">
+                        <Button variant="outline" onClick={downloadQRCode} className="justify-start">
+                          <QrCode className="mr-2 h-4 w-4" />
+                          QR Code Only
+                        </Button>
+                        <Button variant="outline" className="justify-start">
+                          <FileImage className="mr-2 h-4 w-4" />
+                          With Template
+                        </Button>
+                        <Button variant="outline" className="justify-start">
+                          <Printer className="mr-2 h-4 w-4" />
+                          Print Ready PDF
+                        </Button>
+                      </div>
+                    </div>
+
+                    <Separator />
+
+                    <div>
+                      <h3 className="font-medium mb-3">Share Options</h3>
+                      <div className="grid grid-cols-2 gap-3">
+                        <Button variant="outline" className="justify-start">
+                          <Mail className="mr-2 h-4 w-4" />
+                          Email
+                        </Button>
+                        <Button variant="outline" className="justify-start">
+                          <Facebook className="mr-2 h-4 w-4" />
+                          Facebook
+                        </Button>
+                        <Button variant="outline" className="justify-start">
+                          <Instagram className="mr-2 h-4 w-4" />
+                          Instagram
+                        </Button>
+                        <Button variant="outline" className="justify-start">
+                          <Twitter className="mr-2 h-4 w-4" />
+                          Twitter
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
+
+        {/* Right Column - Live Preview */}
+        <div className="md:col-span-2">
+          <Card className="sticky top-4">
+            <CardHeader>
+              <CardTitle>Live Preview</CardTitle>
+              <CardDescription>Scan with your phone to test</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col items-center justify-center p-6">
+              <div className="bg-white p-4 rounded-lg shadow-sm border mb-4 w-full max-w-[280px] flex flex-col items-center">
+                <canvas ref={qrRef} className="mb-2" />
+                <p className="text-center text-sm font-medium mt-2">{menuName}</p>
+              </div>
+              <div className="grid grid-cols-2 gap-2 w-full">
+                <Button variant="outline" size="sm" onClick={downloadQRCode}>
                   <Download className="mr-2 h-4 w-4" />
-                  Download for Printing
+                  Download
                 </Button>
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
+                <Button variant="outline" size="sm">
+                  <Share2 className="mr-2 h-4 w-4" />
+                  Share
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
-      <Card className="mt-6">
+      <Card className="mt-8">
         <CardHeader>
           <CardTitle>Next Steps</CardTitle>
           <CardDescription>What to do with your QR code</CardDescription>
@@ -153,38 +345,28 @@ export default function CreateQRPage() {
           <div className="grid gap-4 md:grid-cols-3">
             <div className="flex flex-col items-center space-y-2 rounded-lg border p-4 text-center">
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <Download className="h-6 w-6 text-primary" />
+                <Table className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="font-medium">Download</h3>
-              <p className="text-sm text-gray-500">Download your QR code as a high-quality PNG image for printing</p>
+              <h3 className="font-medium">Table Placement</h3>
+              <p className="text-sm text-muted-foreground">
+                Create table tents or stickers to place on each table for easy access
+              </p>
             </div>
             <div className="flex flex-col items-center space-y-2 rounded-lg border p-4 text-center">
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <QrCode className="h-6 w-6 text-primary" />
+                <FileImage className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="font-medium">Print</h3>
-              <p className="text-sm text-gray-500">Print your QR code and place it on tables or in your menu</p>
+              <h3 className="font-medium">Menu Integration</h3>
+              <p className="text-sm text-muted-foreground">Add your QR code to printed menus for takeout customers</p>
             </div>
             <div className="flex flex-col items-center space-y-2 rounded-lg border p-4 text-center">
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-6 w-6 text-primary"
-                >
-                  <path d="M12 20.94c1.5 0 2.75 1.06 4 1.06 3 0 6-8 6-12.22A4.91 4.91 0 0 0 17 5c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 0 0-5 4.78C2 14 5 22 8 22c1.25 0 2.5-1.06 4-1.06Z" />
-                  <path d="M10 2c1 .5 2 2 2 5" />
-                </svg>
+                <Smartphone className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="font-medium">Share</h3>
-              <p className="text-sm text-gray-500">Share the QR code on social media or your website</p>
+              <h3 className="font-medium">Digital Sharing</h3>
+              <p className="text-sm text-muted-foreground">
+                Share on your website and social media for online customers
+              </p>
             </div>
           </div>
         </CardContent>
