@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "Create QR Code Menus for Free | Menulya.com",
   description:
     "Create and manage digital menus with Menulya.com. Generate QR codes, update your menu anytime, and deliver a contactless dining experience — completely free.",
-  generator: "v0.dev",
+  generator: "berkaynayman.com",
 }
 
 export default function RootLayout({
@@ -20,6 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+      </head>
       <body className={inter.className} suppressHydrationWarning>
         <AuthProvider>{children}</AuthProvider>
       </body>
