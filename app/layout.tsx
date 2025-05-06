@@ -10,7 +10,26 @@ export const metadata: Metadata = {
   title: "Create QR Code Menus for Free | Menulya.com",
   description:
     "Create and manage digital menus with Menulya.com. Generate QR codes, update your menu anytime, and deliver a contactless dining experience — completely free.",
-  generator: "berkaynayman.com",
+  metadataBase: new URL("https://www.menulya.com"),
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://www.menulya.com",
+    title: "Create QR Code Menus for Free | Menulya.com",
+    description:
+      "Create and manage digital menus with Menulya.com. Generate QR codes, update your menu anytime, and deliver a contactless dining experience — completely free.",
+    siteName: "Menulya",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Create QR Code Menus for Free | Menulya.com",
+    description:
+      "Create and manage digital menus with Menulya.com. Generate QR codes, update your menu anytime, and deliver a contactless dining experience — completely free.",
+  },
+  alternates: {
+    canonical: "https://www.menulya.com",
+  },
+  generator: "www.berkaynayman.com",
 }
 
 export default function RootLayout({
