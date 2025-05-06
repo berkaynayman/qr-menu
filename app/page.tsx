@@ -83,11 +83,6 @@ export default function Home() {
                       <ArrowRight className="h-4 w-4" />
                     </Button>
                   </Link>
-                  <Link href="/demo">
-                    <Button size="lg" variant="outline" className="w-full sm:w-auto">
-                      Try a Live Demo
-                    </Button>
-                  </Link>
                 </div>
               </div>
               <div className="relative aspect-[4/3] h-[300px] w-full overflow-hidden rounded-xl lg:h-[400px] xl:h-[450px] order-first lg:order-last">
@@ -267,11 +262,6 @@ export default function Home() {
                   <Button size="lg" className="gap-1.5">
                     Create My Menu
                     <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
-                <Link href="/demo">
-                  <Button size="lg" variant="outline">
-                    Try a Live Demo
                   </Button>
                 </Link>
               </div>
