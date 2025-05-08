@@ -1,16 +1,13 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Link from "next/link"
-import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { ChevronRight, Menu, Plus, QrCode, Settings, User, Trash2, LogOut, HelpCircle } from "lucide-react"
+import { Plus, QrCode, Trash2 } from "lucide-react"
 import { getUserMenus } from "@/lib/api/menus"
 import { useAuth } from "@/contexts/auth-context"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,6 +18,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { Header } from "@/components/header"
 
 const mockStats = {
   totalMenus: 3,
@@ -83,121 +81,7 @@ export default function DashboardPage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="md:hidden">
-              <Menu className="h-5 w-5" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="w-72">
-            <nav className="grid gap-2 text-lg font-medium">
-              <Link href="/dashboard" className="flex items-center gap-2 bg-gray-100 px-3 py-2 dark:bg-gray-800">
-                <ChevronRight className="h-4 w-4" />
-                Dashboard
-              </Link>
-              <Link
-                href="/dashboard/menus"
-                className="flex items-center gap-2 px-3 py-2 text-gray-500 dark:text-gray-400"
-              >
-                <ChevronRight className="h-4 w-4" />
-                Menus
-              </Link>
-              <Link
-                href="/dashboard/settings"
-                className="flex items-center gap-2 px-3 py-2 text-gray-500 dark:text-gray-400"
-              >
-                <ChevronRight className="h-4 w-4" />
-                Settings
-              </Link>
-            </nav>
-          </SheetContent>
-        </Sheet>
-        <Link href="/" className="flex items-center gap-2 font-semibold">
-          <Image src="/qr-menu-logo.png" alt="QR Menu Logo" width={32} height={32} />
-          <span>QR Menu</span>
-        </Link>
-        <nav className="ml-auto hidden gap-6 md:flex">
-          <Link href="/dashboard" className="text-lg font-semibold text-gray-900 dark:text-gray-50">
-            Dashboard
-          </Link>
-        </nav>
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon">
-            <Settings className="h-5 w-5" />
-          </Button>
-
-          {/* User profile with visible dropdown */}
-          <div className="relative">
-            <Button
-              variant="outline"
-              className="flex items-center gap-2 px-3"
-              onClick={() => document.getElementById("user-dropdown")?.classList.toggle("hidden")}
-            >
-              <User className="h-5 w-5" />
-              <span className="hidden sm:inline">{user?.restaurantName || "Account"}</span>
-            </Button>
-
-            {/* Dropdown menu - always in the DOM but toggled with hidden class */}
-            <div
-              id="user-dropdown"
-              className="hidden absolute right-0 mt-2 w-56 rounded-md border bg-white shadow-lg z-50"
-            >
-              <div className="p-3 border-b">
-                <div className="flex items-center gap-2">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                    <User className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="font-medium">{user?.restaurantName || "Restaurant"}</p>
-                    <p className="text-xs text-gray-500">{user?.email || "user@example.com"}</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="py-1">
-                <Link href="/dashboard" className="flex items-center px-4 py-2 hover:bg-gray-100">
-                  <ChevronRight className="mr-2 h-4 w-4" />
-                  <span>Dashboard</span>
-                </Link>
-                <Link href="/dashboard/create-menu" className="flex items-center px-4 py-2 hover:bg-gray-100">
-                  <Plus className="mr-2 h-4 w-4" />
-                  <span>Create New Menu</span>
-                </Link>
-                <Link href="/dashboard/settings" className="flex items-center px-4 py-2 hover:bg-gray-100">
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Account Settings</span>
-                </Link>
-              </div>
-
-              <div className="border-t py-1">
-                <Link href="/help" className="flex items-center px-4 py-2 hover:bg-gray-100">
-                  <HelpCircle className="mr-2 h-4 w-4" />
-                  <span>Help & Support</span>
-                </Link>
-              </div>
-
-              <div className="border-t py-1">
-                <button onClick={logout} className="flex w-full items-center px-4 py-2 text-red-500 hover:bg-red-50">
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Separate visible logout button */}
-          <Button
-            variant="outline"
-            className="flex items-center gap-2 text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600"
-            onClick={logout}
-          >
-            <LogOut className="h-4 w-4" />
-            <span className="hidden sm:inline">Log out</span>
-          </Button>
-        </div>
-      </header>
-
+      <Header variant="dashboard" />
       <main className="flex-1 p-4 md:p-6">
         <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
           <Card>

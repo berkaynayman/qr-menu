@@ -4,12 +4,12 @@ import { ArrowRight, QrCode, Smartphone, Edit3, Globe, Palette, BarChart3, Check
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { MainNav } from "@/components/main-nav"
+import { Header } from "@/components/header"
 
 export default function FeaturesPage() {
   return (
     <div className="flex flex-col min-h-screen">
-      <MainNav />
+      <Header />
       <main className="flex-1">
         {/* Hero Section */}
         <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">

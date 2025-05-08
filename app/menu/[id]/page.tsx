@@ -1,14 +1,13 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Link from "next/link"
-import Image from "next/image"
 import { ChevronDown, ChevronUp } from "lucide-react"
 import { useParams } from "next/navigation"
 import { getPublicMenu } from "@/lib/api/menus"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Header } from "@/components/header"
 
 interface MenuItem {
   id: string
@@ -73,18 +72,7 @@ export default function MenuPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <header className="sticky top-0 z-10 border-b bg-white p-4 shadow-sm dark:bg-gray-800">
-        <div className="container mx-auto flex items-center justify-between">
-          <h1 className="text-lg sm:text-xl font-bold truncate">{menuData.menuName}</h1>
-          <Link href="/">
-            <Button variant="ghost" size="sm" className="flex items-center gap-2">
-              <Image src="/qr-menu-logo.png" alt="QR Menu Logo" width={24} height={24} />
-              <span className="hidden sm:inline">QR Menu</span>
-            </Button>
-          </Link>
-        </div>
-      </header>
-
+      <Header variant="minimal" />
       <main className="container mx-auto max-w-3xl p-4 py-6 sm:py-8">
         <Card className="mb-6 sm:mb-8">
           <CardHeader>

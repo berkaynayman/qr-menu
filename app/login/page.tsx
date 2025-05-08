@@ -12,7 +12,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { MainNav } from "@/components/main-nav"
+import { Header } from "@/components/header"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -59,7 +59,7 @@ export default function LoginPage() {
   if (isLoading) {
     return (
       <div className="flex flex-col min-h-screen">
-        <MainNav />
+        <Header />
         <div className="flex flex-1 items-center justify-center">
           <p>Loading...</p>
         </div>
@@ -69,7 +69,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <MainNav />
+      <Header />
       <div className="flex flex-1 items-center justify-center bg-gray-50 px-4 py-12 dark:bg-gray-900">
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1">
