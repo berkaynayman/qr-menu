@@ -10,11 +10,11 @@ export default function PricingPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 items-center">
+        <div className="container m-0-auto flex h-14 items-center">
           <MobileNav />
           <Link className="flex items-center justify-center mr-4" href="/">
-            <Image src="/qr-menu-logo.png" alt="QR Menu Logo" width={32} height={32} className="mr-2" />
-            <span className="font-bold text-xl">QR Menu</span>
+            <Image src="/qr-menu-logo.png" alt="Menulya Logo" width={32} height={32} className="mr-2" />
+            <span className="font-bold text-xl">Menulya</span>
           </Link>
           <nav className="hidden md:flex gap-6 ml-6">
             <Link className="text-sm font-medium hover:text-primary transition-colors" href="/features">
@@ -42,7 +42,7 @@ export default function PricingPage() {
 
       <main className="flex-1">
         <section className="w-full py-12 md:py-24 lg:py-32">
-          <div className="container px-4 md:px-6">
+          <div className="container m-0-auto px-4 md:px-6">
             <div className="mx-auto max-w-3xl text-center">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
                 Simple, Transparent Pricing
@@ -52,15 +52,12 @@ export default function PricingPage() {
               </p>
             </div>
 
-            <div className="mx-auto mt-16 max-w-3xl">
+            <div className="mx-auto mt-16 max-w-3xl m-0-auto">
               <Card className="overflow-hidden border-2 border-primary">
-                <div className="absolute right-4 top-4 rounded-full bg-primary px-4 py-1 text-xs font-medium text-white">
-                  Current Plan
-                </div>
                 <CardHeader className="bg-primary/5 pb-9 pt-6 text-center">
                   <CardTitle className="text-3xl font-bold">Free — For Now, and For Real</CardTitle>
                   <CardDescription className="text-base mt-2.5">
-                    At QR Menu, we're on a mission to help restaurants and food businesses go digital — quickly, easily,
+                    At Menulya, we're on a mission to help restaurants and food businesses go digital — quickly, easily,
                     and without barriers.
                   </CardDescription>
                 </CardHeader>
@@ -82,7 +79,7 @@ export default function PricingPage() {
                     </div>
 
                     <p className="text-gray-500">
-                      We believe in earning your trust before asking for your business. While QR Menu remains free,
+                      We believe in earning your trust before asking for your business. While Menulya remains free,
                       you'll get full access to all core features:
                     </p>
 
@@ -155,7 +152,7 @@ export default function PricingPage() {
       <footer className="border-t py-6">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-gray-500 dark:text-gray-400">© 2023 QR Menu. All rights reserved.</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">© 2023 Menulya. All rights reserved.</p>
             <nav className="flex gap-4">
               <Link className="text-xs hover:underline underline-offset-4" href="#">
                 Terms of Service
