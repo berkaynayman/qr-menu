@@ -13,7 +13,7 @@ export default function FeaturesPage() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
-          <div className="container px-4 md:px-6">
+          <div className="container m-0-auto px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
@@ -31,7 +31,7 @@ export default function FeaturesPage() {
 
         {/* Features Grid */}
         <section className="w-full py-12 md:py-24 lg:py-32">
-          <div className="container px-4 md:px-6">
+          <div className="container m-0-auto px-4 md:px-6">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {/* Feature 1 */}
               <Card className="group relative overflow-hidden transition-all hover:shadow-lg">
@@ -136,7 +136,7 @@ export default function FeaturesPage() {
 
         {/* Tagline Section */}
         <section className="w-full py-12 md:py-16 bg-gray-50 dark:bg-gray-800">
-          <div className="container px-4 md:px-6">
+          <div className="container m-0-auto px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl">
                 Built for simplicity. Designed for restaurants.
@@ -151,7 +151,7 @@ export default function FeaturesPage() {
 
         {/* Benefits Section */}
         <section className="w-full py-12 md:py-24 lg:py-32">
-          <div className="container px-4 md:px-6">
+          <div className="container m-0-auto px-4 md:px-6">
             <div className="grid gap-10 md:grid-cols-2">
               <div className="space-y-4">
                 <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">Why Restaurants Love QR Menu</h2>
@@ -204,7 +204,7 @@ export default function FeaturesPage() {
 
         {/* CTA Section */}
         <section className="w-full py-12 md:py-24 lg:py-32 bg-primary text-primary-foreground">
-          <div className="container px-4 md:px-6">
+          <div className="container m-0-auto px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
@@ -235,7 +235,7 @@ export default function FeaturesPage() {
         </section>
       </main>
       <footer className="border-t py-6">
-        <div className="container px-4 md:px-6">
+        <div className="container m-0-auto px-4 md:px-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-xs text-gray-500 dark:text-gray-400">© 2023 QR Menu. All rights reserved.</p>
             <nav className="flex gap-4">

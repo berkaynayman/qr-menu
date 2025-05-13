@@ -240,7 +240,7 @@ export default function Home() {
         </section>
       </main>
       <footer className="border-t py-6">
-        <div className="container px-4 md:px-6">
+        <div className="container m-0-auto px-4 md:px-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-xs text-gray-500 dark:text-gray-400">© 2023 Menulya. All rights reserved.</p>
             <nav className="flex gap-4">
