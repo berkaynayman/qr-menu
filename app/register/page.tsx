@@ -6,6 +6,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
 import { registerUser } from "@/lib/api/auth"
+import { TransparentLoadingOverlay } from "@/components/transparent-loading-overlay"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -128,6 +129,9 @@ export default function RegisterPage() {
           </form>
         </Card>
       </div>
+
+      {/* Transparent loading overlay */}
+      <TransparentLoadingOverlay isLoading={loading} message="Creating your account..." />
     </div>
   )
 }

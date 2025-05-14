@@ -1,0 +1,35 @@
+/* Loading animation styles */
+@keyframes pulse-grow {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+  }
+  
+  @keyframes loading-progress {
+    0% {
+      width: 0%;
+      left: 0;
+    }
+    50% {
+      width: 100%;
+      left: 0;
+    }
+    100% {
+      width: 0%;
+      left: 100%;
+    }
+  }
+  
+  .loading-bar {
+    animation: loading-progress 1.5s ease-in-out infinite;
+    position: relative;
+  }
+  
+  .animate-pulse-grow {
+    animation: pulse-grow 2s ease-in-out infinite;
+  }
+  

@@ -25,6 +25,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Check for existing token on mount
   useEffect(() => {
     const checkAuth = async () => {
+      setAuthState((prevState) => ({ ...prevState, isLoading: true }))
       try {
         const token = localStorage.getItem("token")
         const userJson = localStorage.getItem("user")
@@ -53,6 +54,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           isAuthenticated: false,
           isLoading: false,
         })
+      } finally {
+        setAuthState((prevState) => ({ ...prevState, isLoading: false }))
       }
     }
 

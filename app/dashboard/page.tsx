@@ -19,6 +19,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { Header } from "@/components/header"
+import { TransparentLoadingOverlay } from "@/components/transparent-loading-overlay"
 
 const mockStats = {
   totalMenus: 3,
@@ -131,7 +132,9 @@ export default function DashboardPage() {
 
         {error && <p className="text-red-500 mb-4">{error}</p>}
         {loading ? (
-          <p>Loading menus...</p>
+          <div className="h-40 flex items-center justify-center">
+            <p className="text-muted-foreground">Loading your menus...</p>
+          </div>
         ) : menus.length === 0 ? (
           <p>No menus found. Start by creating a new one.</p>
         ) : (
@@ -186,6 +189,8 @@ export default function DashboardPage() {
           </div>
         )}
       </main>
+
+      <TransparentLoadingOverlay isLoading={loading && !isLoading} message="Loading your menus..." showLogo={false} />
 
       <AlertDialog open={!!menuToDelete} onOpenChange={(open) => !open && setMenuToDelete(null)}>
         <AlertDialogContent>

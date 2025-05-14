@@ -6,6 +6,7 @@ import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
+import { TransparentLoadingOverlay } from "@/components/transparent-loading-overlay"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -53,18 +54,6 @@ export default function LoginPage() {
     } finally {
       setLoading(false)
     }
-  }
-
-  // Show loading state while checking authentication
-  if (isLoading) {
-    return (
-      <div className="flex flex-col min-h-screen">
-        <Header />
-        <div className="flex flex-1 items-center justify-center">
-          <p>Loading...</p>
-        </div>
-      </div>
-    )
   }
 
   return (
@@ -150,6 +139,9 @@ export default function LoginPage() {
           </form>
         </Card>
       </div>
+
+      {/* Transparent loading overlay */}
+      <TransparentLoadingOverlay isLoading={loading} message="Logging in..." />
     </div>
   )
 }
