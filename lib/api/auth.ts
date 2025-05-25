@@ -1,12 +1,14 @@
 // lib/api/auth.ts
 import type { User } from "@/lib/types"
 
+export const API_BASE_URL = "https://qr-menu-backend-yukr.onrender.com/api";
+
 export async function registerUser(data: {
   restaurantName: string
   email: string
   password: string
 }): Promise<{ message: string }> {
-  const response = await fetch("https://qr-menu-backend-yukr.onrender.com/api/auth/register", {
+  const response = await fetch(`${API_BASE_URL}/auth/register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -26,7 +28,7 @@ export async function loginUser(data: {
   email: string
   password: string
 }): Promise<{ token: string; user: User }> {
-  const response = await fetch("https://qr-menu-backend-yukr.onrender.com/api/auth/login", {
+  const response = await fetch(`${API_BASE_URL}/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

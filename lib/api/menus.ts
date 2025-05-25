@@ -1,3 +1,5 @@
+import { API_BASE_URL } from "./auth";
+
 export async function createMenu(data: {
   menuName: string
   menuDescription: string
@@ -16,7 +18,7 @@ export async function createMenu(data: {
   const token = localStorage.getItem("token")
   if (!token) throw new Error("User is not authenticated.")
 
-  const response = await fetch("https://qr-menu-backend-yukr.onrender.com/api/menus/create", {
+  const response = await fetch(`${API_BASE_URL}/menus/create`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -37,7 +39,7 @@ export async function getUserMenus(): Promise<any[]> {
   const token = localStorage.getItem("token")
   if (!token) throw new Error("Not authenticated")
 
-  const res = await fetch("https://qr-menu-backend-yukr.onrender.com/api/menus", {
+  const res = await fetch(`${API_BASE_URL}/menus`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -53,13 +55,33 @@ export async function getUserMenus(): Promise<any[]> {
 }
 
 export async function getPublicMenu(menuId: string) {
-  const res = await fetch(`https://qr-menu-backend-yukr.onrender.com/api/menus/${menuId}`, {
+  const res = await fetch(`${API_BASE_URL}/menus/${menuId}`, {
     cache: "no-store",
   })
 
   if (!res.ok) {
     const error = await res.json()
     throw new Error(error.message || "Failed to fetch menu")
+  }
+
+  return res.json()
+}
+
+export async function deleteMenu(menuId: string) {
+  const token = localStorage.getItem("token")
+  if (!token) throw new Error("Not authenticated")
+
+  const res = await fetch(`${API_BASE_URL}/menus/${menuId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
+    },
+  })
+
+  if (!res.ok) {
+    const error = await res.json()
+    throw new Error(error.message || "Failed to delete menu")
   }
 
   return res.json()
