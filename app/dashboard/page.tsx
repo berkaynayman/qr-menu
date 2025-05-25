@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Plus, QrCode, Trash2 } from "lucide-react"
-import { getUserMenus } from "@/lib/api/menus"
+import { getUserMenus, deleteMenu } from "@/lib/api/menus"
 import { useAuth } from "@/contexts/auth-context"
 
 import { Button } from "@/components/ui/button"
@@ -67,12 +67,15 @@ export default function DashboardPage() {
     if (!menuToDelete) return
 
     setIsDeleting(true)
-    // Buraya gerçek DELETE endpoint geldiyse entegre ederiz
-    setTimeout(() => {
+    try {
+      await deleteMenu(menuToDelete)
       setMenus(menus.filter((menu) => menu._id !== menuToDelete))
+    } catch (err: any) {
+      setError(err.message || "Failed to delete menu")
+    } finally {
       setIsDeleting(false)
       setMenuToDelete(null)
-    }, 1000)
+    }
   }
 
   // Show loading state while checking authentication
