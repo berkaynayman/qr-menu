@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Plus, QrCode, Trash2 } from "lucide-react"
 import { getUserMenus, deleteMenu } from "@/lib/api/menus"
+import { getDashboardStats, type DashboardStats } from "@/lib/api/stats"
 import { useAuth } from "@/contexts/auth-context"
 
 import { Button } from "@/components/ui/button"
@@ -21,17 +22,20 @@ import {
 import { Header } from "@/components/header"
 import { TransparentLoadingOverlay } from "@/components/transparent-loading-overlay"
 
-const mockStats = {
-  totalMenus: 3,
-  totalQrCodes: 3,
-  totalItems: 12,
-  totalScans: 128,
-}
+
 
 export default function DashboardPage() {
   const router = useRouter()
   const { user, isAuthenticated, isLoading, logout } = useAuth()
   const [menus, setMenus] = useState<any[]>([])
+  const [stats, setStats] = useState<DashboardStats>({
+    totalMenus: 0,
+    totalViews: 0,
+    mostViewedMenu: null,
+    totalCategories: 0,
+    totalItems: 0,
+    avgViewsPerMenu: 0
+  })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [menuToDelete, setMenuToDelete] = useState<string | null>(null)
@@ -45,21 +49,27 @@ export default function DashboardPage() {
   }, [isAuthenticated, isLoading, router])
 
   useEffect(() => {
-    async function fetchMenus() {
+    async function fetchData() {
       if (!isAuthenticated) return
 
       try {
-        const data = await getUserMenus()
-        setMenus(data)
+        setLoading(true)
+        const [menuData, statsData] = await Promise.all([
+          getUserMenus(),
+          getDashboardStats()
+        ])
+        
+        setMenus(menuData)
+        setStats(statsData)
       } catch (err: any) {
-        setError(err.message || "Failed to load menus")
+        setError(err.message || "Failed to load dashboard data")
       } finally {
         setLoading(false)
       }
     }
 
     if (!isLoading) {
-      fetchMenus()
+      fetchData()
     }
   }, [isAuthenticated, isLoading])
 
@@ -93,17 +103,15 @@ export default function DashboardPage() {
               <CardTitle className="text-sm font-medium">Total Menus</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{mockStats.totalMenus}</div>
-              <p className="text-xs text-gray-500 dark:text-gray-400">+0% from last month</p>
+              <div className="text-2xl font-bold">{stats.totalMenus}</div>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium">Total QR Scans</CardTitle>
+              <CardTitle className="text-sm font-medium">Total Views</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{mockStats.totalScans}</div>
-              <p className="text-xs text-gray-500 dark:text-gray-400">+14% from last month</p>
+              <div className="text-2xl font-bold">{stats.totalViews}</div>
             </CardContent>
           </Card>
           <Card>
@@ -111,20 +119,39 @@ export default function DashboardPage() {
               <CardTitle className="text-sm font-medium">Menu Items</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{mockStats.totalItems}</div>
-              <p className="text-xs text-gray-500 dark:text-gray-400">+2 from last month</p>
+              <div className="text-2xl font-bold">{stats.totalItems}</div>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium">Active QR Codes</CardTitle>
+              <CardTitle className="text-sm font-medium">Categories</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{mockStats.totalQrCodes}</div>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Same as last month</p>
+              <div className="text-2xl font-bold">{stats.totalCategories}</div>
             </CardContent>
           </Card>
         </div>
+        {stats.mostViewedMenu && (
+          <div className="mt-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Most Viewed Menu</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="text-lg font-medium">{stats.mostViewedMenu.name}</p>
+                    <p className="text-sm text-muted-foreground">Total views: {stats.mostViewedMenu.views}</p>
+                  </div>
+                  <Button variant="outline" size="sm" onClick={() => router.push(`/menu/${stats.mostViewedMenu.id}`)}>
+                    View Menu
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
         <div className="mt-6 mb-6 flex items-center justify-between">
           <h2 className="text-xl md:text-2xl font-bold">Your Menus</h2>
           <Button onClick={() => router.push("/dashboard/create-menu")}>
