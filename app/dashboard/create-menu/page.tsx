@@ -105,7 +105,7 @@ export default function CreateMenuPage() {
         currency,
         categories,
       })
-      router.push("/dashboard/create-qr")
+      router.push("/dashboard")
     } catch (err: any) {
       setError(err.message || "Failed to create menu")
     } finally {
