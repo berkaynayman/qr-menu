@@ -1,12 +1,14 @@
 // lib/api/auth.ts
 import type { User } from "@/lib/types"
 
+//http://localhost:8080/api
 export const API_BASE_URL = "https://qr-menu-backend-yukr.onrender.com/api";
 
 export async function registerUser(data: {
   restaurantName: string
   email: string
   password: string
+  phoneNumber: string
 }): Promise<{ message: string }> {
   const response = await fetch(`${API_BASE_URL}/auth/register`, {
     method: "POST",
