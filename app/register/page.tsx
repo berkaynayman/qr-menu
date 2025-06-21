@@ -24,6 +24,7 @@ export default function RegisterPage() {
     restaurantName: "",
     email: "",
     password: "",
+    phoneNumber: "",
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,6 +84,18 @@ export default function RegisterPage() {
                   required
                   type="email"
                   value={formData.email}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="phoneNumber">Phone Number</Label>
+                <Input
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  placeholder="Enter your phone number"
+                  required
+                  type="tel"
+                  value={formData.phoneNumber}
                   onChange={handleChange}
                 />
               </div>
