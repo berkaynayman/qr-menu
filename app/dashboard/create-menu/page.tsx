@@ -30,7 +30,7 @@ export default function CreateMenuPage() {
   const router = useRouter()
   const [menuName, setMenuName] = useState("")
   const [menuDescription, setMenuDescription] = useState("")
-  const [currency, setCurrency] = useState("USD")
+  const [currency, setCurrency] = useState("Złoty")
   const [categories, setCategories] = useState<MenuCategory[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -164,6 +164,7 @@ export default function CreateMenuPage() {
                 <SelectValue placeholder="Select currency" />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="USD">Złoty (zł)</SelectItem>
                 <SelectItem value="USD">USD ($)</SelectItem>
                 <SelectItem value="EUR">EUR (€)</SelectItem>
                 <SelectItem value="GBP">GBP (£)</SelectItem>
@@ -226,6 +227,7 @@ export default function CreateMenuPage() {
                     </div>
                     <div className="col-span-1 relative">
                       <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                        {currency === "Złoty" && "zł"}
                         {currency === "USD" && "$"}
                         {currency === "EUR" && "€"}
                         {currency === "GBP" && "£"}

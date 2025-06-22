@@ -111,6 +111,7 @@ export default function MenuPage() {
                           </div>
                           <div className="text-right whitespace-nowrap">
                             <span className="font-medium">
+                              {menuData.currency === "Złoty" && "zł"}
                               {menuData.currency === "USD" && "$"}
                               {menuData.currency === "EUR" && "€"}
                               {menuData.currency === "GBP" && "£"}
