@@ -2,7 +2,7 @@
 import type { User } from "@/lib/types"
 
 //http://localhost:8080/api
-export const API_BASE_URL = "https://qr-menu-backend-yukr.onrender.com/api";
+export const API_BASE_URL = "https://qrmenu-api-a5hegtf4f7e9dchg.ukwest-01.azurewebsites.net/api";
 
 export async function registerUser(data: {
   restaurantName: string
